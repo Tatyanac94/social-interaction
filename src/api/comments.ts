@@ -4,10 +4,8 @@ import { validateContent } from '../middleware/validation';
 
 const router = Router();
 
-// Middleware to validate comment content
 router.use(validateContent);
 
-// Add a comment to a specific post
 router.post('/posts/:id/comments', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { content, username } = req.body;
@@ -39,7 +37,6 @@ router.post('/posts/:id/comments', async (req: Request, res: Response) => {
     res.status(201).json(comment);
 });
 
-// Retrieve all comments for a specific post
 router.get('/posts/:id/comments', async (req: Request, res: Response) => {
     const { id } = req.params;
 

@@ -115,7 +115,7 @@
     "target": "ES2020",
     "module": "commonjs",
     "rootDir": "./src",
-    "outDir": "./public",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true
   },
