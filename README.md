@@ -74,7 +74,7 @@ For Creating a Post:
 }
 ```
 
-For updating a comment:
+For updating a Comment:
 
 ```json
 {
