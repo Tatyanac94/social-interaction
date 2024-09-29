@@ -4,7 +4,6 @@ import { validateContent } from '../middleware/validation';
 
 const router = Router();
 
-// Apply validateContent middleware only for POST requests
 router.post('/', validateContent, async (req: Request, res: Response) => {
   const { content } = req.body;
 

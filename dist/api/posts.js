@@ -6,7 +6,6 @@ const supabase_1 = require("../config/supabase");
 const validation_1 = require("../middleware/validation");
 const router = (0, express_1.Router)();
 exports.router = router;
-// Apply validateContent middleware only for POST requests
 router.post('/', validation_1.validateContent, async (req, res) => {
     const { content } = req.body;
     const { data, error } = await supabase_1.supabase

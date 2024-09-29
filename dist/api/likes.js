@@ -5,6 +5,20 @@ const express_1 = require("express");
 const supabase_1 = require("../config/supabase");
 const router = (0, express_1.Router)();
 exports.router = router;
+// Get likes for a specific post
+router.get('/posts/:id/likes', async (req, res) => {
+    const { id } = req.params;
+    const { data: likes, error } = await supabase_1.supabase
+        .from('postlike')
+        .select('*')
+        .eq('postid', id);
+    if (error) {
+        console.error('Error fetching likes:', error);
+        return res.status(500).json({ error: 'Failed to fetch likes' });
+    }
+    res.json(likes || []);
+});
+// Like a post
 router.post('/posts/:id/likes', async (req, res) => {
     const { id } = req.params;
     const { data: post, error: postError } = await supabase_1.supabase
@@ -13,31 +27,28 @@ router.post('/posts/:id/likes', async (req, res) => {
         .eq('id', id)
         .single();
     if (postError || !post) {
+        console.error('Post not found:', postError);
         return res.status(404).json({ error: 'Post not found' });
     }
     const { error: likeError } = await supabase_1.supabase
         .from('postlike')
-        .insert([{ PostID: post.id }]);
+        .insert([{ postid: post.id }]);
     if (likeError) {
-        return res.status(500).json({ error: likeError.message });
+        console.error('Error liking post:', likeError);
+        return res.status(500).json({ error: 'Failed to like post' });
     }
     res.status(201).json({ message: 'Post liked successfully' });
 });
-router.post('/comments/:id/likes', async (req, res) => {
-    const { id } = req.params;
-    const { data: comment, error: commentError } = await supabase_1.supabase
-        .from('comment')
-        .select('id, PostID')
-        .eq('id', id)
-        .single();
-    if (commentError || !comment) {
-        return res.status(404).json({ error: 'Comment not found' });
-    }
-    const { error: likeError } = await supabase_1.supabase
+// Delete a like by ID
+router.delete('/likes/:likeId', async (req, res) => {
+    const { likeId } = req.params;
+    const { error } = await supabase_1.supabase
         .from('postlike')
-        .insert([{ CommentID: comment.id, PostID: comment.PostID }]);
-    if (likeError) {
-        return res.status(500).json({ error: likeError.message });
+        .delete()
+        .eq('id', likeId);
+    if (error) {
+        console.error('Error deleting like:', error);
+        return res.status(500).json({ error: 'Failed to delete like' });
     }
-    res.status(201).json({ message: 'Comment liked successfully' });
+    res.json({ message: 'Like deleted successfully' });
 });
