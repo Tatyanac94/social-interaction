@@ -70,7 +70,7 @@ For Creating a Post:
 {
     "title": "Your post title",
     "content": "Your post content here",
-    "username": "Your name here" //Username is optional. You can remove the username an your post will be Anonymous.
+    "username": "Your name here" // Username is optional. If you remove the username, your post will be labeled as Anonymous.
 }
 ```
 
@@ -79,7 +79,7 @@ For updating a comment:
 ```json
 {
     "content": "Your updated comment here",
-    "username": "Your name here" //Username is optional. You can remove the username an your comment will be Anonymous.
+    "username": "Your name here" // Username is optional. If you remove the username, your comment will be labeled as Anonymous.
 }
 ```
 
