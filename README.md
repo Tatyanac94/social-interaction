@@ -1,4 +1,4 @@
-# Social-Interaction
+# Social Interaction
 
 ## Author: Tatyana Cuttino
 
@@ -6,7 +6,7 @@
 
 The Social Interaction project is a user-friendly backend API designed to enhance social connections on a digital platform. It allows users to easily create, share, and engage with content through posts and comments, making it simple for everyone to connect and express their thoughts.
 
-This API provides all the necessary tools for a lively community, encouraging meaningful interactions and conversations among users. If a user chooses not to provide their name when creating a post or comment, the system will automatically label them as "Anonymous." This ensures that everyone can participate comfortably, fostering an inclusive environment for all users.
+This API provides all the necessary tools for an active community, encouraging meaningful interactions and conversations among users. If a user chooses not to provide their name when creating a post or comment, the system will automatically label them as "Anonymous." This ensures that everyone can participate comfortably, fostering an inclusive environment for all users.
 
 ## How to Run
 
@@ -37,20 +37,53 @@ Open your browser and navigate to <http://localhost:4000> to see the app in acti
 
 ## Key Features
 
-API Routes:
+## API Routes
 
-* GET /api/snacks: Retrieves a list of all post, comments, and likes.
-* GET /api/snacks/
-: Fetches details of a single post by its ID.
-* POST /api/snacks: Creates a new post entry.
-* PUT /api/snacks/
-: Updates an existing snack entry.
-* DELETE /api/snacks/
-: Deletes a snack entry.
+POSTS:
+
+* GET /api/posts - Retrieves a list of all posts.
+* GET /api/posts/:id - Fetches details of a single post by its ID.
+* POST /api/posts - Creates a new post entry.
+* PUT /api/posts/:id - Updates an existing post entry by its ID.
+* DELETE /api/posts/:id - Deletes a post by its ID.
+
+COMMENTS:
+
+* GET /api/comments/posts/:id/comments - To get all comments for a specific post.
+* POST /api/comments/posts/:id/comments - To add a comment to a specific post by the post ID.
+* PUT /api/comments/comments/:commentId - To update a comment by its ID.
+* DELETE /api/comments/comments/:commentId - Deletes a comment by its ID.
+
+LIKES:
+
+* GET /api/likes/posts/:id/likes - To view likes for a post.
+* POST /api/likes/posts/:id/likes - For liking a post.
+* DELETE /api/likes/likes/:likeId - To delete a like by its ID.
+
+## Request Body Format for Posting and Updating Comments and Posts
+
+When making a PUT request to update a comment, ensure that you send a valid JSON body. The request body should be formatted as follows:
+
+For Creating a Post:
+
+```json
+{
+    "title": "Your post title",
+    "content": "Your post content here",
+    "username": "Your name here" //Username is optional. You can remove the username an your post will be Anonymous.
+}
+```
+
+For updating a comment:
+
+```json
+{
+    "content": "Your updated comment here",
+    "username": "Your name here" //Username is optional. You can remove the username an your comment will be Anonymous.
+}
+```
 
 ## Technologies and Resources Used
-
-* [My Postman Collection](https://www.postman.com/tatyanac94/my-projects/collection/ilffzf6/deployed-snacks-project?action=share&creator=34457002)
 
 * Vercel: Deployment platform for serverless functions and static sites.
 
@@ -61,6 +94,8 @@ API Routes:
 * Supabase: Backend-as-a-service platform providing a PostgreSQL database and RESTful API.
 
 * Javascript: Programming language used for both server-side and client-side code.
+
+* Postman: Write and run automated tests for API endpoints. (GET, POST, PUT, DELETE, etc.).
 
 * Jest & SuperTest: Tools for testing and HTTP assertions.
 
