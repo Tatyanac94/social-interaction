@@ -12,26 +12,42 @@ This API provides all the necessary tools for an active community, encouraging m
 
 Clone the repository: <https://github.com/Tatyanac94/social-interaction.git>
 
-Navigate to the project directory: cd [project-directory]
+Navigate to the project directory:
+
+```bash
+cd [project-directory]
+```
 
 ## Installation Command
 
-Install dependencies: npm install
+Install dependencies using the following command:
+
+```bash
+npm install
+```
 
 ## Set Up Environmental Variables
 
-Create a `.env` file in the root directory of the project
+Create a `.env` file in the root directory of the project:
 
-```Supabase
+```plaintext
 SUPABASE_URL=https://your-project-id.supabase.co
 SUPABASE_KEY=your-anon-public-key
 ```
 
 ## Run the Server
 
-For development with auto-reloading: npm run dev
+For production:
 
-For production: npm start
+```bash
+npm start
+```
+
+For development with auto-reloading:
+
+```bash
+npm run dev
+```
 
 Open your browser and navigate to <http://localhost:4000> to see the app in action.
 
@@ -62,24 +78,26 @@ LIKES:
 
 ## Request Body Format for Posting and Updating Comments and Posts
 
-When making a PUT request to update a comment, ensure that you send a valid JSON body. The request body should be formatted as follows:
+When making a POST or PUT request to create or update a comment or post entry, ensure that you send a valid JSON body. The request body should be formatted as follows:
 
-For Creating a Post:
+For creating or updating a Post:
+(Username is optional. If you remove the username, your post will be labeled as Anonymous.)
 
 ```json
 {
     "title": "Your post title",
     "content": "Your post content here",
-    "username": "Your name here" // Username is optional. If you remove the username, your post will be labeled as Anonymous.
+    "username": "Your name here"
 }
 ```
 
-For updating a Comment:
+For creating or updating a Comment:
+(Username is optional. If you remove the username, your comment will be labeled as Anonymous.)
 
 ```json
 {
     "content": "Your updated comment here",
-    "username": "Your name here" // Username is optional. If you remove the username, your comment will be labeled as Anonymous.
+    "username": "Your name here"
 }
 ```
 
