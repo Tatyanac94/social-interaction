@@ -48,6 +48,83 @@
 
 
 
+// import { Request, Response, NextFunction } from 'express';
+// import { supabase } from '../config/supabase'; 
+
+// export const validateContent = (req: Request, res: Response, next: NextFunction) => {
+//   const { content } = req.body;
+
+//   // Check if the request method is POST or PUT
+//   if ((req.method === 'POST' || req.method === 'PUT') && (!content || typeof content !== 'string' || content.trim() === '')) {
+//     return res.status(400).json({ error: 'Content must be a non-empty string' });
+//   }
+
+//   next();
+// };
+
+// export const validatePostId = async (req: Request, res: Response, next: NextFunction) => {
+//   const { id: postId } = req.params;
+
+//   try {
+//     const { data: post, error } = await supabase
+//       .from('post')  // Make sure this is lowercase
+//       .select('id')
+//       .eq('id', postId)
+//       .single();
+
+//     if (error || !post) {
+//       return res.status(404).json({ error: 'Post not found' });
+//     }
+
+//     next();
+//   } catch (err) {
+//     console.error('Error validating post ID:', err);
+//     return res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+// export const validateCommentId = async (req: Request, res: Response, next: NextFunction) => {
+//   const { id: commentId } = req.params;
+
+//   try {
+//     const { data: comment, error } = await supabase
+//       .from('comment')  // Ensure this is also lowercase
+//       .select('id')
+//       .eq('id', commentId)
+//       .single();
+
+//     if (error || !comment) {
+//       return res.status(404).json({ error: 'Comment not found' });
+//     }
+
+//     next();
+//   } catch (err) {
+//     console.error('Error validating comment ID:', err);
+//     return res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { Request, Response, NextFunction } from 'express';
 import { supabase } from '../config/supabase'; 
 
@@ -67,7 +144,7 @@ export const validatePostId = async (req: Request, res: Response, next: NextFunc
 
   try {
     const { data: post, error } = await supabase
-      .from('post')  // Make sure this is lowercase
+      .from('post')  // Ensure this matches your Supabase table name
       .select('id')
       .eq('id', postId)
       .single();
@@ -88,7 +165,7 @@ export const validateCommentId = async (req: Request, res: Response, next: NextF
 
   try {
     const { data: comment, error } = await supabase
-      .from('comment')  // Ensure this is also lowercase
+      .from('comment')  // Ensure this matches your Supabase table name
       .select('id')
       .eq('id', commentId)
       .single();

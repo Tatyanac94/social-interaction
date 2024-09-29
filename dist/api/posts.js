@@ -6,8 +6,8 @@ const supabase_1 = require("../config/supabase");
 const validation_1 = require("../middleware/validation");
 const router = (0, express_1.Router)();
 exports.router = router;
-router.use(validation_1.validateContent);
-router.post('/posts', async (req, res) => {
+// Apply validateContent middleware only for POST requests
+router.post('/', validation_1.validateContent, async (req, res) => {
     const { content } = req.body;
     const { data, error } = await supabase_1.supabase
         .from('post')
@@ -18,7 +18,8 @@ router.post('/posts', async (req, res) => {
     }
     res.status(201).json(data);
 });
-router.get('/posts', async (_req, res) => {
+// GET all posts
+router.get('/', async (_req, res) => {
     const { data, error } = await supabase_1.supabase
         .from('post')
         .select('*')
@@ -30,11 +31,11 @@ router.get('/posts', async (_req, res) => {
         const { count: commentCount } = await supabase_1.supabase
             .from('comment')
             .select('id', { count: 'exact', head: true })
-            .eq('PostID', post.id);
+            .eq('postid', post.id);
         const { count: likeCount } = await supabase_1.supabase
             .from('postlike')
             .select('id', { count: 'exact', head: true })
-            .eq('PostID', post.id);
+            .eq('postid', post.id);
         return {
             ...post,
             commentCount,
@@ -43,7 +44,8 @@ router.get('/posts', async (_req, res) => {
     }));
     res.json(postsWithCounts);
 });
-router.get('/posts/:id', async (req, res) => {
+// GET a specific post by ID
+router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const { data: post, error: postError } = await supabase_1.supabase
         .from('post')
@@ -56,7 +58,7 @@ router.get('/posts/:id', async (req, res) => {
     const { data: comments, error: commentsError } = await supabase_1.supabase
         .from('comment')
         .select('*')
-        .eq('PostID', post.id)
+        .eq('postid', post.id)
         .order('timestamp', { ascending: false });
     if (commentsError) {
         return res.status(500).json({ error: commentsError.message });
@@ -64,7 +66,7 @@ router.get('/posts/:id', async (req, res) => {
     const { data: likes, error: likesError } = await supabase_1.supabase
         .from('postlike')
         .select('*')
-        .eq('PostID', post.id);
+        .eq('postid', post.id);
     if (likesError) {
         return res.status(500).json({ error: likesError.message });
     }
@@ -73,4 +75,56 @@ router.get('/posts/:id', async (req, res) => {
         comments,
         likes
     });
+});
+// PUT to update a post by ID
+router.put('/:id', validation_1.validateContent, async (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+    const { data: post, error: postError } = await supabase_1.supabase
+        .from('post')
+        .select('*')
+        .eq('id', id)
+        .single();
+    if (postError || !post) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+    const { data, error } = await supabase_1.supabase
+        .from('post')
+        .update({ content })
+        .eq('id', id)
+        .single();
+    if (error) {
+        return res.status(500).json({ error: error.message });
+    }
+    res.json(data);
+});
+// DELETE a post by ID
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    // Delete comments associated with the post
+    const { error: commentDeleteError } = await supabase_1.supabase
+        .from('comment')
+        .delete()
+        .eq('postid', id);
+    if (commentDeleteError) {
+        return res.status(500).json({ error: commentDeleteError.message });
+    }
+    // Delete likes associated with the post
+    const { error: likeDeleteError } = await supabase_1.supabase
+        .from('postlike')
+        .delete()
+        .eq('postid', id);
+    if (likeDeleteError) {
+        return res.status(500).json({ error: likeDeleteError.message });
+    }
+    // Delete the post
+    const { data: post, error: postError } = await supabase_1.supabase
+        .from('post')
+        .delete()
+        .eq('id', id)
+        .single();
+    if (postError || !post) {
+        return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json({ message: 'Post deleted successfully' });
 });
