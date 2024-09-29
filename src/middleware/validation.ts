@@ -48,10 +48,6 @@
 
 
 
-
-
-
-
 import { Request, Response, NextFunction } from 'express';
 import { supabase } from '../config/supabase'; 
 
@@ -67,11 +63,11 @@ export const validateContent = (req: Request, res: Response, next: NextFunction)
 };
 
 export const validatePostId = async (req: Request, res: Response, next: NextFunction) => {
-  const { id: postId } = req.params; 
+  const { id: postId } = req.params;
 
   try {
     const { data: post, error } = await supabase
-      .from('Post')
+      .from('post')  // Make sure this is lowercase
       .select('id')
       .eq('id', postId)
       .single();
@@ -88,11 +84,11 @@ export const validatePostId = async (req: Request, res: Response, next: NextFunc
 };
 
 export const validateCommentId = async (req: Request, res: Response, next: NextFunction) => {
-  const { id: commentId } = req.params; 
+  const { id: commentId } = req.params;
 
   try {
     const { data: comment, error } = await supabase
-      .from('comment')
+      .from('comment')  // Ensure this is also lowercase
       .select('id')
       .eq('id', commentId)
       .single();
