@@ -20,9 +20,18 @@ router.get('/posts/:id/likes', async (req: Request, res: Response) => {
   res.json(likes || []); 
 });
 
-// Like a post
+
+
+
+
+
+
+
+
+// Like a post with a username
 router.post('/posts/:id/likes', async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { username } = req.body; // Get the username from the request body
 
   const { data: post, error: postError } = await supabase
     .from('post')
@@ -37,7 +46,7 @@ router.post('/posts/:id/likes', async (req: Request, res: Response) => {
 
   const { error: likeError } = await supabase
     .from('postlike')
-    .insert([{ postid: post.id }]); 
+    .insert([{ postid: post.id, username }]); // Insert username with like
 
   if (likeError) {
     console.error('Error liking post:', likeError);
@@ -46,6 +55,35 @@ router.post('/posts/:id/likes', async (req: Request, res: Response) => {
 
   res.status(201).json({ message: 'Post liked successfully' });
 });
+
+
+
+// // Like a post
+// router.post('/posts/:id/likes', async (req: Request, res: Response) => {
+//   const { id } = req.params;
+
+//   const { data: post, error: postError } = await supabase
+//     .from('post')
+//     .select('id')
+//     .eq('id', id)
+//     .single();
+
+//   if (postError || !post) {
+//     console.error('Post not found:', postError);
+//     return res.status(404).json({ error: 'Post not found' });
+//   }
+
+//   const { error: likeError } = await supabase
+//     .from('postlike')
+//     .insert([{ postid: post.id }]); 
+
+//   if (likeError) {
+//     console.error('Error liking post:', likeError);
+//     return res.status(500).json({ error: 'Failed to like post' });
+//   }
+
+//   res.status(201).json({ message: 'Post liked successfully' });
+// });
 
 // Delete a like by ID
 router.delete('/likes/:likeId', async (req: Request, res: Response) => {
