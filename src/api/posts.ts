@@ -197,12 +197,16 @@ import { validateContent } from '../middleware/validation';
 const router = Router();
 
 // Create a post
+// Create a post
 router.post('/', validateContent, async (req: Request, res: Response) => {
-  const { content } = req.body;
+  const { content, username } = req.body; // Extract username from request body
 
   const { data, error } = await supabase
     .from('post') 
-    .insert([{ content }])
+    .insert([{ 
+      content, 
+      username: username || 'Anonymous' // Default to 'Anonymous' if username is not provided
+    }])
     .single();
 
   if (error) {
@@ -211,6 +215,8 @@ router.post('/', validateContent, async (req: Request, res: Response) => {
 
   res.status(201).json(data);
 });
+
+
 
 // GET all posts with comments and likes counts
 router.get('/', async (_req: Request, res: Response) => {

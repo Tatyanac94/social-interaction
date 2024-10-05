@@ -135,11 +135,15 @@ const validation_1 = require("../middleware/validation");
 const router = (0, express_1.Router)();
 exports.router = router;
 // Create a post
+// Create a post
 router.post('/', validation_1.validateContent, async (req, res) => {
-    const { content } = req.body;
+    const { content, username } = req.body; // Extract username from request body
     const { data, error } = await supabase_1.supabase
         .from('post')
-        .insert([{ content }])
+        .insert([{
+            content,
+            username: username || 'Anonymous' // Default to 'Anonymous' if username is not provided
+        }])
         .single();
     if (error) {
         return res.status(500).json({ error: error.message });
