@@ -6,7 +6,6 @@ const router = Router();
 
 router.use(validateContent);
 
-// Add a comment to a post
 router.post('/posts/:id/comments', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { content, username } = req.body;
@@ -38,7 +37,6 @@ router.post('/posts/:id/comments', async (req: Request, res: Response) => {
     res.status(201).json(comment);
 });
 
-// Get all comments for a specific post
 router.get('/posts/:id/comments', async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -65,7 +63,6 @@ router.get('/posts/:id/comments', async (req: Request, res: Response) => {
     res.json(comments);
 });
 
-// Update a comment
 router.put('/comments/:commentid', async (req: Request, res: Response) => {
     const { commentid } = req.params;
     const { content } = req.body;
@@ -92,7 +89,6 @@ router.put('/comments/:commentid', async (req: Request, res: Response) => {
     res.json(data);
 });
 
-// Delete a comment
 router.delete('/comments/:commentid', async (req: Request, res: Response) => {
     const { commentid } = req.params;
 

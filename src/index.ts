@@ -5,8 +5,10 @@ import cors from 'cors';
 import { router as postRouter } from './api/posts';
 import { router as commentRouter } from './api/comments';
 import { router as likeRouter } from './api/likes';
+import { router as commentLikeRouter } from './api/commentLikes';
 import { errorHandler } from './utils/errorHandler';
 import { supabase } from './config/supabase';
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -55,6 +57,7 @@ app.get('/', async (req, res) => {
 app.use('/api/posts', postRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/likes', likeRouter);
+app.use('/api/likes', commentLikeRouter);
 
 app.use(errorHandler);
 

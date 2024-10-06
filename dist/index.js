@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const posts_1 = require("./api/posts");
 const comments_1 = require("./api/comments");
 const likes_1 = require("./api/likes");
+const commentLikes_1 = require("./api/commentLikes");
 const errorHandler_1 = require("./utils/errorHandler");
 const supabase_1 = require("./config/supabase");
 const app = (0, express_1.default)();
@@ -50,6 +51,7 @@ app.get('/', async (req, res) => {
 app.use('/api/posts', posts_1.router);
 app.use('/api/comments', comments_1.router);
 app.use('/api/likes', likes_1.router);
+app.use('/api/likes', commentLikes_1.router);
 app.use(errorHandler_1.errorHandler);
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
