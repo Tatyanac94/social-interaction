@@ -41,11 +41,22 @@ router.get('/', async (_req, res) => {
             .from('comment')
             .select('*')
             .eq('postid', post.id);
+        // Handle possible null for comments
+        const commentsWithLikes = comments ? await Promise.all(comments.map(async (comment) => {
+            const { count: commentLikeCount } = await supabase_1.supabase
+                .from('postlike')
+                .select('id', { count: 'exact', head: true })
+                .eq('commentid', comment.id);
+            return {
+                ...comment,
+                likeCount: commentLikeCount
+            };
+        })) : [];
         return {
             ...post,
             commentCount,
             likeCount,
-            comments
+            comments: commentsWithLikes // Ensure you're returning comments with likes
         };
     }));
     res.json(postsWithCounts);

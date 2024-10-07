@@ -31,17 +31,34 @@ app.get('/', async (req, res) => {
                 .from('comment')
                 .select('*')
                 .eq('postid', post.id);
+            const commentsWithLikes = await Promise.all((comments || []).map(async (comment) => {
+                const { count: commentLikeCount } = await supabase_1.supabase
+                    .from('postlike')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('commentid', comment.id);
+                return {
+                    ...comment,
+                    likeCount: commentLikeCount || 0,
+                };
+            }));
             const { count: likeCount } = await supabase_1.supabase
                 .from('postlike')
                 .select('id', { count: 'exact', head: true })
                 .eq('postid', post.id);
             return {
                 ...post,
-                comments: comments || [],
+                comments: commentsWithLikes,
                 likeCount: likeCount || 0,
             };
         }));
-        res.json(postsWithDetails);
+        const formattedPosts = postsWithDetails.map(post => ({
+            content: post.content,
+            username: post.username,
+            timestamp: post.timestamp,
+            likeCount: post.likeCount,
+            comments: post.comments,
+        }));
+        res.json(formattedPosts);
     }
     catch (err) {
         console.error('Server Error:', err);
